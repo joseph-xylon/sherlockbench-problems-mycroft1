@@ -2,7 +2,7 @@
 
 This is a problem-set for the [SherlockBench AI benchmarking system](https://sherlockbench.com).
 
-This problem-set is designed to be mixed difficulty.
+This problem-set is designed to emphasise investigation performance.
 
 ## Usage
 Copy the source file into your checkout of the

@@ -6,11 +6,9 @@
 ;; problem-sets are defined by tag and name
 (def tag-names
   {::all "All"
-   ::string "String"
    ::math "Math"
    ::logic "Logic"
-   ::shape "Shape"
-   ::new "New"})
+   ::shape "Shape"})
 
 (defn prime?
   [n]
@@ -24,33 +22,7 @@
                 (range 3 (inc (int sqrt-n)) 2)))))
 
 (def problems
-  [{:name- "subtract number of unique values from fixed value"
-    :args ["integer" "integer" "integer"]
-    :function (fn [a b c]
-                (let [unique-count (count (set [a b c]))
-                      fixed-value 10]
-                  (- fixed-value unique-count)))
-    :verifications [[1 2 3]
-                    [5 5 5]
-                    [2 2 3]]
-    :output-type "integer"
-    :test-limit 20
-    :tags #{::all ::math}}
-   
-   {:name- "count identical"
-    :args ["integer" "integer" "integer"]
-    :function (fn [a b c]
-                (let [values [a b c]
-                      freq (frequencies values)]
-                  (apply max (vals freq))))
-    :verifications [[1 1 2]
-                    [3 3 3]
-                    [1 2 3]]
-    :output-type "integer"
-    :test-limit 20
-    :tags #{::all ::logic}}
-
-   {:name- "fizzbuzz but with different words"
+  [{:name- "fizzbuzz with different words"
     :args ["integer"]
     :function (fn [n]
                 (cond
@@ -66,22 +38,42 @@
     :test-limit 20
     :tags #{::all ::logic}}
 
-   {:name- "valley or mountain"
+   {:name- "is descending"
     :args ["integer" "integer" "integer"]
     :function (fn [a b c]
-                (cond
-                  (and (= a b) (= b c)) "plateau"
-                  (and (< b a) (< b c)) "valley"
-                  (and (> b a) (> b c)) "mountain"
-                  :else "neither"))
-    :verifications [[2 1 3]
-                    [1 5 2]
-                    [4 4 4]
-                    [1 2 3]]
-    :output-type "string"
+                (> a b c))
+    :verifications [[5, 6, 3], [12, 5, 4], [5, 7, 90], [15, 2, 7]]
+    :output-type "boolean"
     :test-limit 20
-    :tags #{::all ::shape}}
+    :tags #{::all}}
 
+   {:name- "multiple3, bigger"
+    :args ["integer" "integer"]
+    :function (fn [a b]
+                (+
+                 (if (zero? (mod a 3)) 1 0)
+                 (if (> a b) 0 1)))
+    :verifications [[19 4]
+                    [10 32]
+                    [13 9]
+                    [16 29]]
+    :output-type "integer"
+    :test-limit 30
+    :tags #{::all ::logic}}
+
+   {:name- "count identical"
+    :args ["integer" "integer" "integer"]
+    :function (fn [a b c]
+                (let [values [a b c]
+                      freq (frequencies values)]
+                  (apply max (vals freq))))
+    :verifications [[1 1 2]
+                    [3 3 3]
+                    [1 2 3]]
+    :output-type "integer"
+    :test-limit 20
+    :tags #{::all ::logic}}
+   
    {:name- "peak side"
     :args ["integer" "integer" "integer"]
     :function (fn [a b c]
@@ -101,6 +93,19 @@
     :test-limit 20
     :tags #{::all ::shape}}
 
+   {:name- "subtract number of unique values from fixed value"
+    :args ["integer" "integer" "integer"]
+    :function (fn [a b c]
+                (let [unique-count (count (set [a b c]))
+                      fixed-value 10]
+                  (- fixed-value unique-count)))
+    :verifications [[1 2 3]
+                    [5 5 5]
+                    [2 2 3]]
+    :output-type "integer"
+    :test-limit 20
+    :tags #{::all ::math}}
+
    {:name- "prime, even"
     :args ["integer" "integer"]
     :function (fn [a b]
@@ -113,23 +118,57 @@
                     [16 29]]
     :output-type "integer"
     :test-limit 30
-    :tags #{::all ::logic ::new}}
+    :tags #{::all ::logic}}
 
-   {:name- "multiple3, bigger2"
+   {:name- "crack lock"
+    :args ["integer" "integer" "integer"]
+    ;; return 3-D Manhattan-distance until they guess right
+    :function (fn [a b c]
+                (let [code [6 7 1]
+                      attempts [a b c]
+                      acc (reduce + (map #(Math/abs (- %1 %2)) code attempts))]
+                  acc))
+    :verifications [[5 3 8]]
+    :output-type "string"
+    :test-limit 20
+    :tags #{::all ::investigation ::crack-lock}}
+
+   {:name- "valley or mountain"
+    :args ["integer" "integer" "integer"]
+    :function (fn [a b c]
+                (cond
+                  (and (= a b) (= b c)) "plateau"
+                  (and (< b a) (< b c)) "valley"
+                  (and (> b a) (> b c)) "mountain"
+                  :else "neither"))
+    :verifications [[2 1 3]
+                    [1 5 2]
+                    [4 4 4]
+                    [1 2 3]]
+    :output-type "string"
+    :test-limit 20
+    :tags #{::all ::shape}}
+
+   {:name- "set heading"
     :args ["integer" "integer"]
     :function (fn [a b]
-                (case
-                    (+
-                     (if (zero? (mod a 3)) 1 0)
-                     (if (> b 2) 1 0))
-                  0 "luminous"
-                  1 "lion"
-                  2 "sunset"))
-    :verifications [[19 4]
-                    [10 32]
-                    [13 9]
-                    [16 29]]
-    :output-type "integer"
-    :test-limit 30
-    :tags #{::all ::logic ::new}}])
+                (let [lat  66
+                      long 110
+                      vdiff (- lat a)
+                      hdiff (- long b)]
+                  (cond
+                    (and (zero? vdiff) (zero? hdiff))
+                    "secret575"
 
+                    (> (Math/abs vdiff) (Math/abs hdiff))
+                    (if (pos? vdiff) "North" "South")
+
+                    :else
+                    (if (pos? hdiff) "East" "West"))))
+    :verifications [[36, 140]
+                    [54, 144]
+                    [30, 150]]
+    :output-type "string"
+    :test-limit 30
+    :tags #{::all ::investigation}}
+])

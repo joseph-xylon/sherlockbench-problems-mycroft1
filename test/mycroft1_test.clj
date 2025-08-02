@@ -19,11 +19,11 @@
   (is (= 3 (eval-fn "count identical" 3 3 3))) ; max occurrence is 3 (for 3)
   (is (= 1 (eval-fn "count identical" 1 2 3)))) ; max occurrence is 1 (all different)
 
-(deftest test-fizzbuzz-but-with-different-words
-  (is (= "1" (eval-fn "fizzbuzz but with different words" 1)))
-  (is (= "Boom" (eval-fn "fizzbuzz but with different words" 3)))
-  (is (= "Crash" (eval-fn "fizzbuzz but with different words" 5)))
-  (is (= "BoomCrash" (eval-fn "fizzbuzz but with different words" 15))))
+(deftest test-fizzbuzz-with-different-words
+  (is (= "1" (eval-fn "fizzbuzz with different words" 1)))
+  (is (= "Boom" (eval-fn "fizzbuzz with different words" 3)))
+  (is (= "Crash" (eval-fn "fizzbuzz with different words" 5)))
+  (is (= "BoomCrash" (eval-fn "fizzbuzz with different words" 15))))
 
 (comment
   (run-tests)
